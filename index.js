@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const payOS = require("./utils/payos");
+const payOS = require("./utils/payos"); // Ensure this is correctly implemented
 
 const app = express();
 const PORT = process.env.PORT || 3030;
@@ -17,7 +17,8 @@ app.use("/payment", require("./controllers/payment-controller"));
 app.use("/order", require("./controllers/order-controller"));
 
 app.post("/create-payment-link", async (req, res) => {
-    const YOUR_DOMAIN = "https://enigma-dropshipping.up.railway.app";
+    const YOUR_DOMAIN =
+        process.env.SERVER_URL || "https://enigma-dropshipping.up.railway.app";
     const body = {
         orderCode: Number(String(Date.now()).slice(-6)),
         amount: req.body.amount,
@@ -30,13 +31,14 @@ app.post("/create-payment-link", async (req, res) => {
         const paymentLinkResponse = await payOS.createPaymentLink(body);
         res.json({ paymentUrl: paymentLinkResponse.checkoutUrl }); // Use res.json for a JSON response
     } catch (error) {
-        console.error(error);
+        console.error("Error creating payment link:", error);
         res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
     }
 });
 
-app.post("/create-payment-link-test", async (req, res) => {
-    const YOUR_DOMAIN = "https://enigma-dropshipping.up.railway.app";
+app.post("/test", async (req, res) => {
+    const YOUR_DOMAIN =
+        process.env.SERVER_URL || "https://enigma-dropshipping.up.railway.app";
     const body = {
         orderCode: Number(String(Date.now()).slice(-6)),
         amount: 2000,
@@ -46,10 +48,12 @@ app.post("/create-payment-link-test", async (req, res) => {
     };
 
     try {
+        console.log("Request body:", body); // Log the request body
         const paymentLinkResponse = await payOS.createPaymentLink(body);
+        console.log("Payment link response:", paymentLinkResponse); // Log the response
         res.json({ paymentUrl: paymentLinkResponse.checkoutUrl }); // Use res.json for a JSON response
     } catch (error) {
-        console.error(error);
+        console.error("Error in /test endpoint:", error);
         res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
     }
 });
