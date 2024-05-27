@@ -7,16 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 
 dotenv.config(); // Load environment variables
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:3030"; // Set default if not provided
 
-app.use(
-    cors({
-        origin: "exp://172.16.0.138:8081", // Replace with your React Native app's origin
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        preflightContinue: false,
-        optionsSuccessStatus: 204,
-    })
-);
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -25,7 +17,7 @@ app.use("/payment", require("./controllers/payment-controller"));
 app.use("/order", require("./controllers/order-controller"));
 
 app.post("/create-payment-link", async (req, res) => {
-    const YOUR_DOMAIN = "localhost:3030";
+    const YOUR_DOMAIN = "https://enigma-dropshipping.up.railway.app";
     const body = {
         orderCode: Number(String(Date.now()).slice(-6)),
         amount: req.body.amount,
