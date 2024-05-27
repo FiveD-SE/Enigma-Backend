@@ -35,6 +35,25 @@ app.post("/create-payment-link", async (req, res) => {
     }
 });
 
+app.post("/create-payment-link-test", async (req, res) => {
+    const YOUR_DOMAIN = "https://enigma-dropshipping.up.railway.app";
+    const body = {
+        orderCode: Number(String(Date.now()).slice(-6)),
+        amount: 2000,
+        description: "Test payment link from PayOS",
+        returnUrl: `${YOUR_DOMAIN}/success`,
+        cancelUrl: `${YOUR_DOMAIN}/cancel`,
+    };
+
+    try {
+        const paymentLinkResponse = await payOS.createPaymentLink(body);
+        res.json({ paymentUrl: paymentLinkResponse.checkoutUrl }); // Use res.json for a JSON response
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
+    }
+});
+
 app.listen(PORT, function () {
     console.log(`Server is listening on port ${PORT}`);
 });
