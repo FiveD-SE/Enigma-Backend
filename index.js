@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const payOS = require("./utils/payos"); // Ensure this is correctly implemented
+const payOS = require("./utils/payos");
 
 const app = express();
 const PORT = process.env.PORT || 3030;
@@ -33,21 +33,6 @@ app.post("/create-payment-link", async (req, res) => {
     } catch (error) {
         console.error("Error creating payment link:", error);
         res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
-    }
-});
-
-app.get("/payment-request/:id", async (req, res) => {
-    const id = req.params.id; // Extract id from request params
-    try {
-        const paymentRequest = await fetchPaymentRequest(id);
-        res.json(paymentRequest); // Send payment request details as JSON response
-    } catch (error) {
-        console.error("Error fetching payment request:", error);
-        if (error.response && error.response.status === 429) {
-            res.status(429).json({ error: "Too many requests" }); // Send 429 status if too many requests are made
-        } else {
-            res.status(500).json({ error: "Something went wrong" }); // Send 500 status for other errors
-        }
     }
 });
 
