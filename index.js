@@ -36,6 +36,34 @@ app.post("/create-payment-link", async (req, res) => {
     }
 });
 
+// get payment link information
+app.get("/payment-link/:orderCode", async (req, res) => {
+    try {
+        const order = await payOS.getPaymentLinkInformation(
+            req.params.orderCode
+        );
+        if (!order) {
+            return res.json({
+                error: -1,
+                message: "failed",
+                data: null,
+            });
+        }
+        return res.json({
+            error: 0,
+            message: "ok",
+            data: order,
+        });
+    } catch (error) {
+        console.error("Error getting payment link information:", error);
+        return res.json({
+            error: -1,
+            message: "failed",
+            data: null,
+        });
+    }
+});
+
 app.post("/test", async (req, res) => {
     const YOUR_DOMAIN =
         process.env.SERVER_URL || "https://enigma-dropshipping.up.railway.app";
