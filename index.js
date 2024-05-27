@@ -20,7 +20,7 @@ app.post("/create-payment-link", async (req, res) => {
     const YOUR_DOMAIN =
         process.env.SERVER_URL || "https://enigma-dropshipping.up.railway.app";
     const body = {
-        orderCode: Number(String(Date.now()).slice(-6)),
+        orderCode: req.body.orderCode,
         amount: req.body.amount,
         description: req.body.description,
         returnUrl: `${YOUR_DOMAIN}/success.html`,
@@ -33,6 +33,21 @@ app.post("/create-payment-link", async (req, res) => {
     } catch (error) {
         console.error("Error creating payment link:", error);
         res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
+    }
+});
+
+app.get("/payment-request/:id", async (req, res) => {
+    const id = req.params.id; // Extract id from request params
+    try {
+        const paymentRequest = await fetchPaymentRequest(id);
+        res.json(paymentRequest); // Send payment request details as JSON response
+    } catch (error) {
+        console.error("Error fetching payment request:", error);
+        if (error.response && error.response.status === 429) {
+            res.status(429).json({ error: "Too many requests" }); // Send 429 status if too many requests are made
+        } else {
+            res.status(500).json({ error: "Something went wrong" }); // Send 500 status for other errors
+        }
     }
 });
 
