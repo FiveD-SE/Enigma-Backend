@@ -22,8 +22,8 @@ app.post("/create-payment-link", async (req, res) => {
         orderCode: Number(String(Date.now()).slice(-6)),
         amount: req.body.amount,
         description: req.body.description,
-        returnUrl: `${YOUR_DOMAIN}/success`,
-        cancelUrl: `${YOUR_DOMAIN}/cancel`,
+        returnUrl: `${YOUR_DOMAIN}/success.html`,
+        cancelUrl: `${YOUR_DOMAIN}/cancel.html`,
     };
 
     try {
@@ -41,8 +41,8 @@ app.post("/create-payment-link-test", async (req, res) => {
         orderCode: Number(String(Date.now()).slice(-6)),
         amount: 2000,
         description: "Test payment link from PayOS",
-        returnUrl: `${YOUR_DOMAIN}/success`,
-        cancelUrl: `${YOUR_DOMAIN}/cancel`,
+        returnUrl: `${YOUR_DOMAIN}/success.html`,
+        cancelUrl: `${YOUR_DOMAIN}/cancel.html`,
     };
 
     try {
