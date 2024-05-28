@@ -6,7 +6,7 @@ const payOS = require("./utils/payos");
 const app = express();
 const PORT = process.env.PORT || 3030;
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 app.use(cors());
 app.use(express.json());
@@ -29,10 +29,11 @@ app.post("/create-payment-link", async (req, res) => {
 
     try {
         const paymentLinkResponse = await payOS.createPaymentLink(body);
-        res.json({ paymentUrl: paymentLinkResponse.checkoutUrl }); // Use res.json for a JSON response
+        res.redirect(paymentLinkResponse.checkoutUrl);
+        res.json({ paymentUrl: paymentLinkResponse.checkoutUrl });
     } catch (error) {
         console.error("Error creating payment link:", error);
-        res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
+        res.status(500).json({ error: "Something went wrong" });
     }
 });
 
@@ -65,24 +66,21 @@ app.get("/payment-link/:orderCode", async (req, res) => {
 });
 
 app.post("/test", async (req, res) => {
-    const YOUR_DOMAIN =
-        process.env.SERVER_URL || "https://enigma-dropshipping.up.railway.app";
+    const YOUR_DOMAIN = "localhost:3030";
     const body = {
-        orderCode: Number(String(Date.now()).slice(-6)),
+        orderCode: Number(new Date()),
         amount: 2000,
-        description: "Test payment link from PayOS",
+        description: "Test payment",
         returnUrl: `${YOUR_DOMAIN}/success.html`,
         cancelUrl: `${YOUR_DOMAIN}/cancel.html`,
     };
 
     try {
-        console.log("Request body:", body); // Log the request body
         const paymentLinkResponse = await payOS.createPaymentLink(body);
-        console.log("Payment link response:", paymentLinkResponse); // Log the response
-        res.json({ paymentUrl: paymentLinkResponse.checkoutUrl }); // Use res.json for a JSON response
+        res.redirect(paymentLinkResponse.checkoutUrl);
     } catch (error) {
-        console.error("Error in /test endpoint:", error);
-        res.status(500).json({ error: "Something went wrong" }); // Send a 500 error response with an error message
+        console.error("Error creating payment link:", error);
+        res.status(500).json({ error: "Something went wrong" });
     }
 });
 
