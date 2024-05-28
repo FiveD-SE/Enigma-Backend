@@ -29,7 +29,6 @@ app.post("/create-payment-link", async (req, res) => {
 
     try {
         const paymentLinkResponse = await payOS.createPaymentLink(body);
-        res.redirect(paymentLinkResponse.checkoutUrl);
         res.json({ paymentUrl: paymentLinkResponse.checkoutUrl });
     } catch (error) {
         console.error("Error creating payment link:", error);
