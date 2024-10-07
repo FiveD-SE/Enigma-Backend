@@ -44,7 +44,7 @@ npm start
 
 ### Payment Controller
 
--   `/payment/payos`: Handles PayOS payment webhooks.
+-   `/payment/payos` : Handles PayOS payment webhooks.
 
 ## Usage
 
