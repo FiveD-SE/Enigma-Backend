@@ -15,7 +15,7 @@ git clone https://github.com/FiveD-SE/Enigma-Backend.git
 ```bash
 npm install
 ```
-
+ 
 3. Set up environment variables:
 
 -   Create a `.env` file in the root directory.
